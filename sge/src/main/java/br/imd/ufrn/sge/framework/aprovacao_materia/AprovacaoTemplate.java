@@ -12,7 +12,7 @@ public abstract class AprovacaoTemplate {
         aprovaAluno(discenteMateria, frequencias);
     }
 
-    public double calculaFrequencia(List<Frequencia> frequencias) {
+    public float calculaFrequencia(List<Frequencia> frequencias) {
         int totalAulas = frequencias.size();
         int totalPresencas = 0;
         for (Frequencia frequencia : frequencias) {
