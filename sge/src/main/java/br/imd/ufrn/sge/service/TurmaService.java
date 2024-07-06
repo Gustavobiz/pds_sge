@@ -69,7 +69,7 @@ public class TurmaService {
                 Turma turmaSalva =  turmaRepository.save(turma.get());
                 for (Materia turmaMateria : turmaSalva.getMaterias()) {
                     DiscenteMateria disMatDis = new DiscenteMateria();
-                    disMatDis.setMatriculaDiscente(matDis);
+                    disMatDis.setMatricula_discente(matDis);
                     disMatDis.setMateria(turmaMateria);
                     matDis.getDiscenteMaterias().add(disMatDis);
                 }
