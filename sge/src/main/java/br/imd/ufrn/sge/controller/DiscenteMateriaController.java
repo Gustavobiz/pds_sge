@@ -88,7 +88,7 @@ public class DiscenteMateriaController {
         if (disMatExistente.isPresent()) {
             DiscenteMateria discenteMateria = disMatExistente.get();
             try {
-                float notaCalculada = disMatService.calcularNota(discenteMateria, tipo);
+                float notaCalculada = disMatService.calcularNota(discenteMateria.getUnidade1(),discenteMateria.getUnidade2(),discenteMateria.getUnidade3(), tipo);
                 return ResponseEntity.ok().body("Nota calculada: " + notaCalculada);
             } catch (IllegalArgumentException e) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());

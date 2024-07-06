@@ -56,14 +56,12 @@ public class DiscenteMateriaService {
         return discenteMateriaRepository.save(nota);
     }
 
-    public float calcularNota(DiscenteMateria discenteMateria, String tipo) {
+    public float calcularNota(float u1, float u2,float u3, String tipo) {
         INotaStrategy strategy = mapStrategy.get(tipo.toLowerCase());
-        NotaContext context = new NotaContext();
         if (strategy == null) {
             throw new IllegalArgumentException("Tipo de nota inválido");
         }
-        context.setNotaStrategy(strategy);
-        return context.calcularMedia(discenteMateria.getUnidade1(), discenteMateria.getUnidade2(), discenteMateria.getUnidade3());
+        return strategy.calcularMedia(u1, u2, u3);
     }
 
 
