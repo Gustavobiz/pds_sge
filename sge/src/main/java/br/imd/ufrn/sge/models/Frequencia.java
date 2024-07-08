@@ -15,6 +15,9 @@ public class Frequencia {
     @Column(name = "id_frequencia", nullable = false)
     private Long id;
 
+    @ManyToOne(cascade = CascadeType.ALL)
+    DiscenteMateria discenteMateria;
+
     @Column(name = "timestamp")
     private LocalDate data = LocalDate.now();
 
