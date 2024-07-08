@@ -4,7 +4,6 @@ import br.imd.ufrn.sge.framework.notas.INotaStrategy;
 import br.imd.ufrn.sge.framework.notas.NotaAmericanaStrategy;
 import br.imd.ufrn.sge.framework.notas.NotaNormalStrategy;
 import br.imd.ufrn.sge.framework.notas.NotaPonderadaStrategy;
-import br.imd.ufrn.sge.framework.notas.strategy.NotaContext;
 import br.imd.ufrn.sge.models.DiscenteMateria;
 import br.imd.ufrn.sge.relatorio.repository.DiscenteMateriaRepository;
 import jakarta.transaction.Transactional;
