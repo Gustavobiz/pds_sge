@@ -1,6 +1,7 @@
 package br.imd.ufrn.sge.relatorio.controller;
 
 import br.imd.ufrn.sge.dto.RelatorioDTO;
+import br.imd.ufrn.sge.framework.config.LLMProviderConfiguration;
 import br.imd.ufrn.sge.framework.llm.models.LLAMA2;
 import br.imd.ufrn.sge.framework.llm.models.LLAMA3;
 import br.imd.ufrn.sge.framework.llm.strategy.LLMContext;
@@ -36,6 +37,9 @@ public class RelatorioController {
     @Autowired
     RelatorioPessoalRepository relatorioPessoalRepository;
 
+    @Autowired
+    LLMProviderConfiguration llmProviderConfiguration;
+
     @GetMapping("/academico/{idMatriculaDiscente}")
     ResponseEntity<RelatorioDTO> getRelatorioAcademico(@PathVariable Long idMatriculaDiscente) throws IOException, InterruptedException {
         RelatorioAcademico rel = null;
@@ -48,15 +52,16 @@ public class RelatorioController {
         int loadBalancer = random.nextInt(2);
 
         if(loadBalancer == 0) {
-            context.setModelo(new LLAMA2(null));
+            // Load config
+            context.setModelo(new LLAMA2(llmProviderConfiguration));
         } else {
-            context.setModelo(new LLAMA3(null));
+            context.setModelo(new LLAMA3(llmProviderConfiguration));
         }
 
         context.gerarRelatorioBaseAcademico("...", null);
 
         try {
-            rel = (RelatorioAcademico) relatorioService.obterRelatorioAcademico(llmaProvider, idMatriculaDiscente);
+            rel = (RelatorioAcademico) relatorioService.obterRelatorioAcademico(idMatriculaDiscente);
         } catch (IOException | InterruptedException e) {
             return ResponseEntity.internalServerError().build();
         }

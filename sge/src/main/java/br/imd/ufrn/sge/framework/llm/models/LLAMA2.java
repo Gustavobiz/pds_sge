@@ -22,6 +22,7 @@ import java.util.Map;
 public class LLAMA2 extends AbstractLLMModel {
 
 
+
     @Autowired
     public LLAMA2(LLMProviderConfiguration config) throws IOException {
         super(new OkHttpClient(), new ObjectMapper(), config.getModels().get("llama2"), new FileLoader(), "llama2");
