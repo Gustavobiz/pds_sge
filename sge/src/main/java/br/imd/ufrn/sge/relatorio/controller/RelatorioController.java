@@ -45,7 +45,7 @@ public class RelatorioController {
         RelatorioAcademico rel = null;
         RelatorioDTO relDTO = new RelatorioDTO();
 
-        LLMContext context = new LLMContext();
+      /*  LLMContext context = new LLMContext();
 
         Random random = new Random();
 
@@ -58,7 +58,7 @@ public class RelatorioController {
             context.setModelo(new LLAMA3(llmProviderConfiguration));
         }
 
-        context.gerarRelatorioBaseAcademico("...", null);
+        context.gerarRelatorioBaseAcademico("...", null);*/
 
         try {
             rel = (RelatorioAcademico) relatorioService.obterRelatorioAcademico(idMatriculaDiscente);

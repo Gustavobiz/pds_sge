@@ -1,5 +1,6 @@
 package br.imd.ufrn.sge.service;
 
+import br.imd.ufrn.sge.framework.config.LLMProviderConfiguration;
 import br.imd.ufrn.sge.framework.llm.models.LLAMA2;
 import br.imd.ufrn.sge.framework.llm.models.LLAMA3;
 import br.imd.ufrn.sge.framework.llm.strategy.LLMContext;
@@ -30,6 +31,9 @@ public class RelatorioService {
     @Autowired
     DiscenteMateriaService notaService;
 
+    @Autowired
+    LLMProviderConfiguration llmProviderConfiguration;
+
     public Relatorio obterRelatorioAcademico(Long idMatriculaDiscente) throws IOException, InterruptedException, IllegalArgumentException {
         Optional<MatriculaDiscente> matriculaDiscenteDB = matriculaDiscenteService.findById(idMatriculaDiscente);
         if (matriculaDiscenteDB.isPresent()) {
@@ -44,9 +48,9 @@ public class RelatorioService {
                 int loadBalancer = random.nextInt(2);
 
                 if(loadBalancer == 0) {
-                    context.setModelo(new LLAMA2(null));
+                    context.setModelo(new LLAMA2(llmProviderConfiguration));
                 } else {
-                    context.setModelo(new LLAMA3(null));
+                    context.setModelo(new LLAMA3(llmProviderConfiguration));
                 }
                 return context.gerarRelatorioBaseAcademico(data, matriculaDiscenteDB.get());
             } else {

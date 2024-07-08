@@ -2,9 +2,9 @@ llm:
   models:
     llama2:
       apiUrl: "https://api.replicate.com/v1/models/meta/llama-2-70b-chat/predictions"
-      apiToken: "r8_KoeiH9mT3lS4LX1UfCFKcY68vOJ9OIf26fmqc"
+      apiToken: "r8_Nr9rfP3Yzxk8KbU8JsfwyZbqakXDitu2J64q9"
       basePrompt: "llm/system_prompt_llama.txt"
     llama3:
       apiUrl: "https://api.replicate.com/v1/models/meta/llama-2-70b-chat/predictions"
-      apiToken: "r8_KoeiH9mT3lS4LX1UfCFKcY68vOJ9OIf26fmqc"
+      apiToken: "r8_Nr9rfP3Yzxk8KbU8JsfwyZbqakXDitu2J64q9"
       basePrompt: "llm/system_prompt_llama.txt"
