@@ -22,8 +22,8 @@ public class Docente {
     private DadosPessoais dadosPessoais;
 
 
-    //@Column(name = "matricula", nullable = false, unique = true)
-  //  private String matricula;
+    @Column(name = "matricula", nullable = false, unique = true)
+    private String matricula;
 
     public Long getId() {
         return id;
@@ -79,7 +79,7 @@ public class Docente {
     }
 
     public void setMatricula(String matricula) {
-        //this.matricula = "S123";
+        this.matricula = "S123";
     }
 
 }
