@@ -27,6 +27,22 @@ const ListAlunosTurma = () => {
 
     useEffect(() => {
 
+        const fetchMedia = async (id) => {
+            try {
+                const response = await fetch(`${domain}:${port}/api/discente-materia/calcular-nota/${id}/normal`);
+                if (!response.ok) {
+                    throw new Error('Failed to fetch grade');
+                }
+                const data = await response.json();
+                console.log(data);
+                return data;
+            } catch (error) {
+                console.error("Error fetching grade:", error);
+                showToast('error', 'Error', `Não foi possível obter a média para o aluno com ID ${id}.`);
+                return null;
+            }
+        };
+
         const fetchDiscenteByMatricula = async (matricula) => {
             try {
                 const response = await fetch(`${domain}:${port}/api/discentes/matricula/${matricula}`);
@@ -55,7 +71,8 @@ const ListAlunosTurma = () => {
                         throw new Error('Failed to fetch matricula data');
                     }
                     const matriculaData = await matriculaResponse.json();
-                    return { ...aluno, matricula: matriculaData.matricula , nome: dadosAluno.dadosPessoais.nome};
+                    const mediaData = await fetchMedia(aluno.id);
+                    return { ...aluno, matricula: matriculaData.matricula , nome: dadosAluno.dadosPessoais.nome, media: mediaData.toFixed(2)};
                 }));
 
                 setAlunos(alunosWithMatricula);
@@ -82,7 +99,7 @@ const ListAlunosTurma = () => {
                     unidade1: newData.unidade1,
                     unidade2: newData.unidade2,
                     unidade3: newData.unidade3,
-                    prova_final: newData.prova_final,
+                    provaFinal: newData.provaFinal,
                 }),
             });
             if (!response.ok) {
@@ -167,8 +184,9 @@ const ListAlunosTurma = () => {
                 <Column field="unidade1" header="UNIDADE 1" editor={inputNumberEditor} />
                 <Column field="unidade2" header="UNIDADE 2" editor={inputNumberEditor} />
                 <Column field="unidade3" header="UNIDADE 3" editor={inputNumberEditor} />
-                <Column field="prova_final" header="FINAL" editor={inputNumberEditor} />
                 <Column field="media" header="MEDIA"/>
+                <Column field="prova_final" header="FINAL" editor={inputNumberEditor} />
+                <Column field="status" header="STATUS" />
                 <Column body={presencaTemplate} header="FREQUÊNCIA" />
                 <Column body={relatorioTemplate} header="RELATÓRIO" />
                 <Column body={observacoesButtonTemplate} header="OBSERVAÇÕES" />
