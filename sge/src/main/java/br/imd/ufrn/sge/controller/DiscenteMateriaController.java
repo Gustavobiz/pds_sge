@@ -61,6 +61,26 @@ public class DiscenteMateriaController {
             }
         }
 
+    @PutMapping("/notas/{id}")
+    public ResponseEntity<DiscenteMateria> atualizarNotas(@PathVariable Long id, @RequestBody DiscenteMateria disMat) {
+        Optional<DiscenteMateria> disMatExistente = disMatService.encontrarPorId(id);
+        if (disMatExistente.isPresent()) {
+            DiscenteMateria discenteMateria = disMatExistente.get();
+            if(disMat.getUnidade1() != null)
+                discenteMateria.setUnidade1(disMat.getUnidade1());
+            if(disMat.getUnidade2() != null)
+                discenteMateria.setUnidade2(disMat.getUnidade2());
+            if(disMat.getUnidade3() != null)
+                discenteMateria.setUnidade3(disMat.getUnidade3());
+            if(disMat.getProvaFinal() != null)
+                discenteMateria.setProvaFinal(disMat.getProvaFinal());
+            DiscenteMateria notaAtualizada = disMatService.salvar(discenteMateria);
+            return ResponseEntity.ok().body(notaAtualizada);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     @PutMapping("/frequencia/{id}")
     public ResponseEntity<DiscenteMateria> atualizarFrequencia(@PathVariable Long id, @RequestBody List<Frequencia> frequencias) {
         Optional<DiscenteMateria> disMatExistente = disMatService.encontrarPorId(id);

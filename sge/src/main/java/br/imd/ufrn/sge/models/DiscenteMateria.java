@@ -3,6 +3,8 @@ import br.imd.ufrn.sge.models.discente.Discente;
 import br.imd.ufrn.sge.models.discente.MatriculaDiscente;
 import br.imd.ufrn.sge.models.materia.Materia;
 import br.imd.ufrn.sge.models.turma.Turma;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -18,6 +20,7 @@ public class DiscenteMateria {
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "matricula_discente", nullable = false)
+    @JsonManagedReference
     private MatriculaDiscente matricula_discente;
 
     @ManyToOne(cascade = CascadeType.ALL)
@@ -33,7 +36,7 @@ public class DiscenteMateria {
     @Column(name = "unidade_3")
     private Float unidade3;
 
-    @Column(name = "prova final")
+    @Column(name = "prova_final")
     private Float provaFinal;
 
     @Enumerated(EnumType.STRING)

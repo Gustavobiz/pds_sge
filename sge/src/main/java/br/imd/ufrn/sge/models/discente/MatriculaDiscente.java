@@ -2,6 +2,8 @@ package br.imd.ufrn.sge.models.discente;
 
 import br.imd.ufrn.sge.models.DiscenteMateria;
 import br.imd.ufrn.sge.models.turma.Turma;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -19,12 +21,14 @@ public class MatriculaDiscente {
 
     @ManyToOne
     @JoinColumn(name = "id_discente", nullable = false)
+    @JsonBackReference
     private Discente discente;
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
     private Status status = Status.MATRICULADO;
 
     @OneToMany(mappedBy = "matricula_discente", cascade = CascadeType.ALL)
+    @JsonBackReference
     private Set<DiscenteMateria> discenteMaterias;
 
 

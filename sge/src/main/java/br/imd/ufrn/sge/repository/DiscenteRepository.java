@@ -19,6 +19,6 @@ public interface DiscenteRepository extends JpaRepository<Discente, Long>{
     List<Discente> findByDadosPessoais(@Param("id") Long id);
 
     @Query("SELECT p FROM Discente p JOIN MatriculaDiscente md ON p.id = md.discente.id WHERE md.matricula = :mat")
-    Optional<Discente> findByMatricula(@Param("mat") Long id);
+    Optional<Discente> findByMatricula(@Param("mat") String id);
 
 }

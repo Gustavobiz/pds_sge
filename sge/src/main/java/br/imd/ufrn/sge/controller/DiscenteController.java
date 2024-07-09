@@ -23,7 +23,7 @@ public class DiscenteController {
     }
 
     @GetMapping("/matricula/{mat}")
-    public ResponseEntity<?> obterDiscentePorMatricula(@PathVariable Long mat) {
+    public ResponseEntity<?> obterDiscentePorMatricula(@PathVariable String mat) {
         Optional<Discente> discentes = discenteService.encontrarDiscentePorMat(mat);
         return ResponseEntity.ok().body(discentes.get());
     }
@@ -40,6 +40,15 @@ public class DiscenteController {
             return ResponseEntity.noContent().build();
     }
 
+    @GetMapping("/idPessoa/{idPessoa}")
+    public ResponseEntity<?> obterDiscentePorIdPessoa(@PathVariable Long idPessoa) {
+        Optional<Discente> discente = discenteService.buscarDiscentePorIdPessoa(idPessoa);
+        if(discente.isPresent()) {
+            return ResponseEntity.ok().body(discente.get());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 
 
 

@@ -22,6 +22,25 @@ const LoginUsuario = () => {
         toast.current.show({ severity, summary, detail });
     };
 
+    // Function to fetch Docente by IdDadosPessoais
+    const fetchDocenteByIdPessoa = async (idPessoa) => {
+        const response = await fetch(`${domain}:${port}/api/docentes/idPessoa/${idPessoa}`);
+        if (!response.ok) {
+            throw new Error('Failed to fetch docente by IdDadosPessoais');
+        }
+        const docenteData = await response.json();
+        return docenteData.id; // Assuming the response contains an id field
+    };
+
+    // Function to fetch Discente by IdDadosPessoais
+    const fetchDiscenteByIdPessoa = async (idPessoa) => {
+        const response = await fetch(`${domain}:${port}/api/discentes/idPessoa/${idPessoa}`);
+        if (!response.ok) {
+            throw new Error('Failed to fetch discente by IdDadosPessoais');
+        }
+        const discenteData = await response.json();
+        return discenteData.id; // Assuming the response contains an id field
+    };
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -45,25 +64,27 @@ const LoginUsuario = () => {
                 const userData = await response.json();
                 showToast('success', 'Success', 'Usuário logado com sucesso!');
 
-               /* if (userData.cargo === "Docente") {
-                    navigate('/home-docente/${userData.id}');
-                } else {
-                    navigate('/home-discente/${userData.id}');
-                }*/
+                if (userData.role === "DOCENTE") {
+                    const docenteId = await fetchDocenteByIdPessoa(userData.idDadosPessoais);
+                    navigate(`/home-docente/${docenteId}`);
+                } else if (userData.role === "DISCENTE") {
+                    const discenteId = await fetchDiscenteByIdPessoa(userData.idDadosPessoais);
+                    navigate(`/home-discente/${discenteId}`);
+                }
 
             } else {
+                    showToast('error', 'Error', 'Ocorreu um erro ao fazer seu login.');
+                }
+            } catch (error) {
                 showToast('error', 'Error', 'Ocorreu um erro ao fazer seu login.');
+                console.error('Error logging in:', error);
             }
-        } catch (error) {
-            showToast('error', 'Error', 'Ocorreu um erro ao fazer seu login.');
-            console.error('Error logging in:', error);
-        }
     };
 
     return (
         <div className="form-container">
             <Toast ref={toast} />
-            <h1>Login Form</h1>
+            <h1>Login</h1>
             <form onSubmit={handleSubmit}>
                 <div className="p-field">
                     <label htmlFor="login">Usuário</label>

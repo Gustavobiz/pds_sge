@@ -5,6 +5,7 @@ import br.imd.ufrn.sge.dto.UserReqResponseDTO;
 import br.imd.ufrn.sge.exceptions.AuthException;
 import br.imd.ufrn.sge.models.DadosPessoais;
 import br.imd.ufrn.sge.models.auth.Usuario;
+import br.imd.ufrn.sge.models.discente.Discente;
 import br.imd.ufrn.sge.repository.auth.UsuarioRepository;
 import br.imd.ufrn.sge.service.DadosPessoaisService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -89,6 +90,8 @@ public class UsuarioManagementService {
                 userReqResponseDTO.setExpirationTime("15 minutos");
                 userReqResponseDTO.setMessage("Usuário autenticado com sucesso");
                 userReqResponseDTO.setStatusCode(200);
+                userReqResponseDTO.setIdDadosPessoais(user.get().getDadosPessoais().getId());
+                userReqResponseDTO.setRole(user.get().getRole());
             }else {
                 throw new AuthException("Dados não encontrado");
             }

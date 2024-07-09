@@ -1,13 +1,12 @@
 package br.imd.ufrn.sge.models.discente;
 
 import br.imd.ufrn.sge.models.DadosPessoais;
-import br.imd.ufrn.sge.models.materia.Materia;
-import br.imd.ufrn.sge.models.turma.Turma;
-import jakarta.persistence.*;
 import br.imd.ufrn.sge.models.responsavel.Responsavel;
+import br.imd.ufrn.sge.models.turma.Turma;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.*;
 
 import java.util.List;
-import java.util.Set;
 
 @Entity
 public class Discente {
@@ -34,6 +33,7 @@ public class Discente {
      */
 
     @OneToMany(mappedBy = "discente", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<MatriculaDiscente> matriculaDiscente;
 
 

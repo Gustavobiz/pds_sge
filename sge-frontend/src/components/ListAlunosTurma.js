@@ -26,22 +26,36 @@ const ListAlunosTurma = () => {
     };
 
     useEffect(() => {
+
+        const fetchDiscenteByMatricula = async (matricula) => {
+            try {
+                const response = await fetch(`${domain}:${port}/api/discentes/matricula/${matricula}`);
+                if (!response.ok) {
+                    throw new Error('Failed to fetch discente data');
+                }
+                return await response.json();
+            } catch (error) {
+                console.error("Error fetching discente data:", error);
+                showToast('error', 'Error', `Não foi possível obter dados do discente com matrícula ${matricula}.`);
+                return null;
+            }
+        };
         const fetchAlunos = async () => {
             try {
                 const response = await fetch(`${domain}:${port}/api/discente-materia/materia/${id}`);
-                console.log(response)
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
                 const data = await response.json();
-                console.log(data)
                 const alunosWithMatricula = await Promise.all(data.map(async (aluno) => {
-                    const matriculaResponse = await fetch(`${domain}:${port}/api/matricula/${aluno.discente.id}`);
+                    const matriculaResponse = await fetch(`${domain}:${port}/api/matricula/discente/${aluno.matricula_discente.matricula}`);
+                    const dadosAluno = await fetchDiscenteByMatricula(aluno.matricula_discente.matricula);
+                    console.log(dadosAluno);
                     if (!matriculaResponse.ok) {
                         throw new Error('Failed to fetch matricula data');
                     }
                     const matriculaData = await matriculaResponse.json();
-                    return { ...aluno, matricula: matriculaData.matricula };
+                    return { ...aluno, matricula: matriculaData.matricula , nome: dadosAluno.dadosPessoais.nome};
                 }));
 
                 setAlunos(alunosWithMatricula);
@@ -68,6 +82,7 @@ const ListAlunosTurma = () => {
                     unidade1: newData.unidade1,
                     unidade2: newData.unidade2,
                     unidade3: newData.unidade3,
+                    prova_final: newData.prova_final,
                 }),
             });
             if (!response.ok) {
@@ -148,10 +163,12 @@ const ListAlunosTurma = () => {
             <h1>Lista de Alunos</h1>
             <DataTable value={alunos} responsiveLayout="scroll" editMode="row" dataKey="id"
                        editingRows={editingRows} onRowEditChange={onRowEditChange} onRowEditComplete={onRowEditComplete}>
-                <Column field="discente.discente.dadosPessoais.nome" header="ALUNO" />
+                <Column field="nome" header="ALUNO" />
                 <Column field="unidade1" header="UNIDADE 1" editor={inputNumberEditor} />
                 <Column field="unidade2" header="UNIDADE 2" editor={inputNumberEditor} />
                 <Column field="unidade3" header="UNIDADE 3" editor={inputNumberEditor} />
+                <Column field="prova_final" header="FINAL" editor={inputNumberEditor} />
+                <Column field="media" header="MEDIA"/>
                 <Column body={presencaTemplate} header="FREQUÊNCIA" />
                 <Column body={relatorioTemplate} header="RELATÓRIO" />
                 <Column body={observacoesButtonTemplate} header="OBSERVAÇÕES" />

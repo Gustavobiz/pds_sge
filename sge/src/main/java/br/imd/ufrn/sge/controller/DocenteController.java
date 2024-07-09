@@ -48,6 +48,16 @@ public class DocenteController {
         docenteService.deletar(id);
     }
 
+    @GetMapping("/idPessoa/{idPessoa}")
+    public ResponseEntity<?> obterDocentePorIdPessoa(@PathVariable Long idPessoa) {
+        Optional<Docente> docente = docenteService.buscarDocentePorIdPessoa(idPessoa);
+        if(docente.isPresent()) {
+            return ResponseEntity.ok().body(docente.get());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 //    @DeleteMapping("/{id}")
 //    public ResponseEntity<Void> deletarDocente(@PathVariable Long id) {
 //        Optional<Docente> docenteExistente = docenteService.encontrarPorId(id);

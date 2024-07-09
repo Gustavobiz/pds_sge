@@ -16,5 +16,7 @@ public class UserReqResponseDTO {
     private String refreshToken;
     private String expirationTime;
     private long idDadosPessoais;
+    private String matricula;
+    private String role;
     private Usuario user;
 }
