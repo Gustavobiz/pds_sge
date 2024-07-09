@@ -36,7 +36,7 @@ public class DiscenteService {
 
 
     public Optional<Discente> encontrarDiscentePorMat(String mat) {
-        if (discenteRepository.findByMatricula(mat).isEmpty()){
+            if (discenteRepository.findByMatricula(mat).isEmpty()){
             throw new IdNaoEncontradoException();
         }
         return discenteRepository.findByMatricula(mat);

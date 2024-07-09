@@ -28,7 +28,7 @@ public class MatriculaDiscente {
     private Status status = Status.MATRICULADO;
 
     @OneToMany(mappedBy = "matricula_discente", cascade = CascadeType.ALL)
-    @JsonBackReference
+    @JsonBackReference("discenteMateriaMatricula")
     private Set<DiscenteMateria> discenteMaterias;
 
 

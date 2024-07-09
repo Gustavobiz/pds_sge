@@ -20,7 +20,7 @@ public class DiscenteMateria {
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "matricula_discente", nullable = false)
-    @JsonManagedReference
+    //@JsonManagedReference("discenteMateriaMatricula")
     private MatriculaDiscente matricula_discente;
 
     @ManyToOne(cascade = CascadeType.ALL)

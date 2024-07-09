@@ -23,47 +23,51 @@ public class DiscenteMateriaController {
         private FrequenciaService frequenciaService;
 
 
+
     @GetMapping("/")
         public List<DiscenteMateria> listarNotas() {
             return disMatService.listarTodos();
         }
 
 
-        @GetMapping("/{id}")
-        public ResponseEntity<?> obterDiscenteMateriaPorId(@PathVariable Long id) {
-            Optional<DiscenteMateria> nota = disMatService.encontrarPorId(id);
+    @GetMapping("/{id}")
+    public ResponseEntity<?> obterDiscenteMateriaPorId(@PathVariable Long id) {
+        Optional<DiscenteMateria> nota = disMatService.encontrarPorId(id);
 
-            if (nota.isPresent()){
-                return ResponseEntity.ok().body(nota.get());
-            }else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Registro de Notas com o ID " + id + " não encontrado");
-            }
+        if (nota.isPresent()){
+            return ResponseEntity.ok().body(nota.get());
+        }else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Registro de Notas com o ID " + id + " não encontrado");
         }
-        @GetMapping("/discente/{matricula_discente}")
-        public ResponseEntity<?> obterMateriaPorMatriculaDiscente(@PathVariable Long matricula_discente) {
-            List<DiscenteMateria> notasEncontradas = disMatService.encontrarPorMatriculaDiscente(matricula_discente);
+    }
+    @GetMapping("/discente/{matricula_discente}")
+    public ResponseEntity<?> obterMateriaPorMatriculaDiscente(@PathVariable Long matricula_discente) {
+        List<DiscenteMateria> notasEncontradas = disMatService.encontrarPorMatriculaDiscente(matricula_discente);
 
-            if (!notasEncontradas.isEmpty()) {
-                return ResponseEntity.ok().body(notasEncontradas);
-            } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Aluno com a matrícula " + matricula_discente + " não encontrado");
-            }
+        if (!notasEncontradas.isEmpty()) {
+            return ResponseEntity.ok().body(notasEncontradas);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Aluno com a matrícula " + matricula_discente + " não encontrado");
         }
+    }
 
-        @GetMapping("/materia/{id}")
-        public ResponseEntity<?> obterDiscentePorIdMateria(@PathVariable Long id) {
-            List<DiscenteMateria> notasEncontradas = disMatService.encontrarPorIdMateria(id);
+    @GetMapping("/materia/{id}")
+    public ResponseEntity<?> obterDiscentePorIdMateria(@PathVariable Long id) {
+        List<DiscenteMateria> notasEncontradas = disMatService.encontrarPorIdMateria(id);
 
-            if (!notasEncontradas.isEmpty()) {
-                return ResponseEntity.ok().body(notasEncontradas);
-            } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Matéria com o ID " + id + " não encontrada");
-            }
+        if (!notasEncontradas.isEmpty()) {
+            return ResponseEntity.ok().body(notasEncontradas);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Matéria com o ID " + id + " não encontrada");
         }
+    }
 
-    @PutMapping("/notas/{id}")
-    public ResponseEntity<DiscenteMateria> atualizarNotas(@PathVariable Long id, @RequestBody DiscenteMateria disMat) {
-        Optional<DiscenteMateria> disMatExistente = disMatService.encontrarPorId(id);
+    @PutMapping(value="/notas/{id}")
+    public ResponseEntity<DiscenteMateria> atualizarNotas(
+            @PathVariable Long id,
+            @RequestBody DiscenteMateria disMat
+    ){
+            Optional<DiscenteMateria> disMatExistente = disMatService.encontrarPorId(id);
         if (disMatExistente.isPresent()) {
             DiscenteMateria discenteMateria = disMatExistente.get();
             if(disMat.getUnidade1() != null)
