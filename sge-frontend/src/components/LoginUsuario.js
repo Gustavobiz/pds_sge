@@ -66,10 +66,10 @@ const LoginUsuario = () => {
 
                 if (userData.role === "DOCENTE") {
                     const docenteId = await fetchDocenteByIdPessoa(userData.idDadosPessoais);
-                    navigate(`/home-docente/${docenteId}`);
+                    navigate(`/home-docente/${userData.idDadosPessoais}`);
                 } else if (userData.role === "DISCENTE") {
                     const discenteId = await fetchDiscenteByIdPessoa(userData.idDadosPessoais);
-                    navigate(`/home-discente/${discenteId}`);
+                    navigate(`/home-discente/${userData.idDadosPessoais}`);
                 }
 
             } else {
