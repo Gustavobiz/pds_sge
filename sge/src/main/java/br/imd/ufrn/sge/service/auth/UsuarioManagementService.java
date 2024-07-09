@@ -41,12 +41,12 @@ public class UsuarioManagementService {
 
         String matricula = userRegisterDTO.getMatricula();
 
-        boolean isDiscente = false;
+        boolean isDiscente = true;
 
         if (matricula.toCharArray()[0] == 'S') {
-            isDiscente = true;
-        }else{
             isDiscente = false;
+        }else{
+            isDiscente = true;
         }
 
 
