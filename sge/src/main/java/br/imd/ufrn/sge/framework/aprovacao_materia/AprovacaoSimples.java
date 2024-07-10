@@ -21,7 +21,7 @@ public class AprovacaoSimples extends AprovacaoTemplate {
         float u2 = discenteMateria.getUnidade2();
         float u3 = discenteMateria.getUnidade3();
         float pf = discenteMateria.getProvaFinal();
-        float media = discenteMateriaService.calcularNota(u1,u2,u3, "normal");
+        float media = discenteMateriaService.calcularNota(u1,u2,u3);
 
         float frequencia = calculaFrequencia(frequencias);
 

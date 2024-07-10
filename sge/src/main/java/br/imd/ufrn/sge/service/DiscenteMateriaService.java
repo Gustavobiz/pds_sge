@@ -1,5 +1,6 @@
 package br.imd.ufrn.sge.service;
 
+import br.imd.ufrn.sge.config.GlobalStrategy;
 import br.imd.ufrn.sge.framework.notas.INotaStrategy;
 import br.imd.ufrn.sge.framework.notas.NotaAmericanaStrategy;
 import br.imd.ufrn.sge.framework.notas.NotaNormalStrategy;
@@ -17,12 +18,15 @@ import java.util.Optional;
 public class DiscenteMateriaService {
 
     @Autowired
+    private GlobalStrategy globalStrategy;
+
+    @Autowired
     private DiscenteMateriaRepository discenteMateriaRepository;
 
     private final Map<String, INotaStrategy> mapStrategy = Map.of(
-            "normal", new NotaNormalStrategy(),
-            "americana", new NotaAmericanaStrategy(),
-            "ead", new NotaPonderadaStrategy()
+            "1", new NotaNormalStrategy(),
+            "2", new NotaAmericanaStrategy(),
+            "3", new NotaPonderadaStrategy()
     );
 
 //    private final Map<String, AprovacaoTemplate> mapStatusTemplate = Map.of(
@@ -55,8 +59,8 @@ public class DiscenteMateriaService {
         return discenteMateriaRepository.save(nota);
     }
 
-    public float calcularNota(float u1, float u2,float u3, String tipo) {
-        INotaStrategy strategy = mapStrategy.get(tipo.toLowerCase());
+    public float calcularNota(float u1, float u2,float u3) {
+        INotaStrategy strategy = mapStrategy.get(globalStrategy.getEscolhaStrategy().toLowerCase());
         if (strategy == null) {
             throw new IllegalArgumentException("Tipo de nota inválido");
         }
