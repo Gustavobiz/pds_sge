@@ -20,6 +20,9 @@ public abstract class AprovacaoTemplate {
                 totalPresencas++;
             }
         }
+        if (totalAulas == 0) {
+            return 0;
+        }
         return (totalPresencas * 100) / totalAulas;
     }
 

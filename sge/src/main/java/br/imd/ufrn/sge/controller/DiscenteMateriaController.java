@@ -2,6 +2,7 @@ package br.imd.ufrn.sge.controller;
 
 import br.imd.ufrn.sge.models.DiscenteMateria;
 import br.imd.ufrn.sge.models.Frequencia;
+import br.imd.ufrn.sge.framework.aprovacao_materia.*;
 import br.imd.ufrn.sge.service.DiscenteMateriaService;
 import br.imd.ufrn.sge.service.FrequenciaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,9 @@ public class DiscenteMateriaController {
 
         @Autowired
         private FrequenciaService frequenciaService;
+
+        @Autowired
+        private AprovacaoSimples aprovacaoSimples;
 
 
 
@@ -76,8 +80,11 @@ public class DiscenteMateriaController {
                 discenteMateria.setUnidade2(disMat.getUnidade2());
             if(disMat.getUnidade3() != null)
                 discenteMateria.setUnidade3(disMat.getUnidade3());
-            if(disMat.getProvaFinal() != null)
+            if(disMat.getProvaFinal() != null) {
                 discenteMateria.setProvaFinal(disMat.getProvaFinal());
+                // Subtituir AProvaçãoSimples por estratégia de aprovação de sua escolha
+                aprovacaoSimples.aprovaAluno(discenteMateria, discenteMateria.getFrequencias());
+            }
             DiscenteMateria notaAtualizada = disMatService.salvar(discenteMateria);
             return ResponseEntity.ok().body(notaAtualizada);
         } else {
