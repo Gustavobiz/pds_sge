@@ -99,7 +99,7 @@ const ListAlunosTurma = () => {
                     unidade1: newData.unidade1,
                     unidade2: newData.unidade2,
                     unidade3: newData.unidade3,
-                    provaFinal: newData.provaFinal,
+                    provaFinal: newData.provaFinal
                 }),
             });
             if (!response.ok) {
@@ -185,7 +185,7 @@ const ListAlunosTurma = () => {
                 <Column field="unidade2" header="UNIDADE 2" editor={inputNumberEditor} />
                 <Column field="unidade3" header="UNIDADE 3" editor={inputNumberEditor} />
                 <Column field="media" header="MEDIA"/>
-                <Column field="prova_final" header="FINAL" editor={inputNumberEditor} />
+                <Column field="provaFinal" header="FINAL" editor={inputNumberEditor} />
                 <Column field="status" header="STATUS" />
                 <Column body={presencaTemplate} header="FREQUÊNCIA" />
                 <Column body={relatorioTemplate} header="RELATÓRIO" />
