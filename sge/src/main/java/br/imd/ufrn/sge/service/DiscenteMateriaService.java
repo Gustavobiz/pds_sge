@@ -59,7 +59,7 @@ public class DiscenteMateriaService {
         return discenteMateriaRepository.save(nota);
     }
 
-    public float calcularNota(float u1, float u2,float u3, String tipo) {
+    public float calcularNota(float u1, float u2,float u3) {
         INotaStrategy strategy = mapStrategy.get(globalStrategy.getEscolhaStrategy().toLowerCase());
         if (strategy == null) {
             throw new IllegalArgumentException("Tipo de nota inválido");

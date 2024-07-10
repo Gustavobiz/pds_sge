@@ -1,3 +1,5 @@
+tipo_aplicacao: "1"
+
 llm:
   models:
     llama2:

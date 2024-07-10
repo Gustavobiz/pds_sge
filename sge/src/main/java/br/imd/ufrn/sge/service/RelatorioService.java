@@ -1,5 +1,6 @@
 package br.imd.ufrn.sge.service;
 
+import br.imd.ufrn.sge.config.GlobalStrategy;
 import br.imd.ufrn.sge.framework.config.LLMProviderConfiguration;
 import br.imd.ufrn.sge.framework.llm.models.LLAMA2;
 import br.imd.ufrn.sge.framework.llm.models.LLAMA3;
@@ -13,11 +14,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Random;
 
 @Service
 public class RelatorioService {
+    @Autowired
+    private GlobalStrategy globalStrategy;
 
     @Autowired
     DadosAcademicoFetcher dadosAcademicoFetcher;
@@ -43,11 +47,11 @@ public class RelatorioService {
 
                 LLMContext context = new LLMContext();
 
-                Random random = new Random();
+//                Random random = new Random();
+//
+//                int loadBalancer = random.nextInt(2);
 
-                int loadBalancer = random.nextInt(2);
-
-                if(loadBalancer == 0) {
+                if(Objects.equals(globalStrategy.getEscolhaStrategy(), "1")) {
                     context.setModelo(new LLAMA2(llmProviderConfiguration));
                 } else {
                     context.setModelo(new LLAMA3(llmProviderConfiguration));

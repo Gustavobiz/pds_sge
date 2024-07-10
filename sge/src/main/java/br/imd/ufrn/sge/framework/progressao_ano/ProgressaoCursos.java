@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service("ProgressaoTotal")
+@Service("ProgressaoCursos")
 public class ProgressaoCursos implements IProgressaoStrategy {
     @Override
     public void aprovaAno(MatriculaDiscente matriculaDiscente, List<Boolean> materiasStatus) {
