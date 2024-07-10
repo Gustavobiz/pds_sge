@@ -10,9 +10,10 @@ import 'primeicons/primeicons.css';
 
 const ListMaterias = () => {
     const [materias, setMaterias] = useState([]);
+    const [matricula, setMatricula] = useState('');
+    const [loading, setLoading] = useState(true);
     const { id } = useParams();
     const toast = useRef(null);
-
     const domain = 'http://localhost';
     const port = 8080;
 
@@ -20,22 +21,73 @@ const ListMaterias = () => {
         toast.current.show({ severity, summary, detail });
     };
 
+    const fetchMatricula = async () => {
+        try {
+            console.log(id)
+            const matriculaResponse = await fetch(`${domain}:${port}/api/matricula/${id}`);
+            console.log(matriculaResponse)
+            if (!matriculaResponse.ok) {
+                throw new Error('Failed to fetch matricula data');
+            }
+            const matriculaData = await matriculaResponse.json();
+            console.log(matriculaData)
+            console.log(matriculaData.matricula)
+            setMatricula(matriculaData.matricula);
+        } catch (error) {
+            console.error('Error fetching data:', error);
+            showToast('error', 'Error', 'Não foi possível obter os dados do usuário.');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const fetchPresencas = async (alunoId) => {
+        try {
+            const response = await fetch(`${domain}:${port}/api/discente-materia/frequencia/${alunoId}`);
+            if (!response.ok) {
+                throw new Error('Failed to fetch presenca data');
+            }
+            const presencas = await response.json();
+            const totalPresencas = presencas.length;
+            const presencasTrue = presencas.filter(presenca => presenca.presenca === true).length;
+            const presencaPercentage = (presencasTrue / totalPresencas) * 100;
+            return presencaPercentage;
+        } catch (error) {
+            console.error("Error fetching presenca data:", error);
+            showToast('error', 'Error', `Não foi possível obter a presença para o aluno com ID ${alunoId}.`);
+            return 'N/A';
+        }
+    };
+
     useEffect(() => {
         const fetchData = async () => {
+            await fetchMatricula();
             try {
-                const response = await fetch(`${domain}:${port}/api/discente-materia/discente/${id}`);
-                console.log(response);
+                console.log(matricula)
+                const response = await fetch(`${domain}:${port}/api/discente-materia/discente/${matricula}`);
+                console.lo("oKAY")
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
                 const data = await response.json();
-                setMaterias(data);
+                const materiasPresenca = await Promise.all(data.map(async (materia) => {
+                    const presencaPercentage = await fetchPresencas(materia.id);
+                    return { ...materia, presenca: presencaPercentage };
+                }));
+                console.lo("oKAY2")
+                setMaterias(materiasPresenca);
             } catch (error) {
-                showToast('error', 'Error', 'Não foi possível listar os alunos.');
+                showToast('error', 'Error', 'Não foi possível listar as matérias.');
+            } finally {
+                setLoading(false);
             }
         };
         fetchData();
-    }, [id]);
+    }, [id, matricula]);
+
+    if (loading) {
+        return <div>Loading...</div>;
+    }
 
     return (
         <div className="list-alunos-container">
@@ -47,6 +99,8 @@ const ListMaterias = () => {
                 <Column field="unidade1" header="UNIDADE 1" />
                 <Column field="unidade2" header="UNIDADE 2" />
                 <Column field="unidade3" header="UNIDADE 3" />
+                <Column field="provaFinal" header="FINAL" />
+                <Column field="status" header="STATUS" />
                 <Column field="presenca" header="FREQUÊNCIA" />
             </DataTable>
         </div>

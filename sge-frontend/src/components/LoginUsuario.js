@@ -64,23 +64,23 @@ const LoginUsuario = () => {
                 const userData = await response.json();
                 showToast('success', 'Success', 'Usuário logado com sucesso!');
 
+                // Check user role and fetch respective ID
                 if (userData.role === "DOCENTE") {
                     const docenteId = await fetchDocenteByIdPessoa(userData.idDadosPessoais);
-                    navigate(`/home-docente/${userData.idDadosPessoais}`);
+                    navigate(`/home-docente/${docenteId}`); // Navigate using docenteId
                 } else if (userData.role === "DISCENTE") {
                     const discenteId = await fetchDiscenteByIdPessoa(userData.idDadosPessoais);
-                    navigate(`/home-discente/${userData.idDadosPessoais}`);
+                    navigate(`/home-discente/${discenteId}`); // Navigate using discenteId
                 }
 
             } else {
-                    showToast('error', 'Error', 'Ocorreu um erro ao fazer seu login.');
-                }
-            } catch (error) {
                 showToast('error', 'Error', 'Ocorreu um erro ao fazer seu login.');
-                console.error('Error logging in:', error);
             }
+        } catch (error) {
+            showToast('error', 'Error', 'Ocorreu um erro ao fazer seu login.');
+            console.error('Error logging in:', error);
+        }
     };
-
     return (
         <div className="form-container">
             <Toast ref={toast} />

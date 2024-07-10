@@ -21,13 +21,12 @@ const Perfil = () => {
                 }
                 const userData = await response.json();
                 setUserData(userData);
-
                 const matriculaResponse = await fetch(`${domain}:${port}/api/matricula/${id}`);
                 if (!matriculaResponse.ok) {
                     throw new Error('Failed to fetch matricula data');
                 }
                 const matriculaData = await matriculaResponse.json();
-                setMatricula(matriculaData.matricula); // assuming the response has a field 'matricula'
+                setMatricula(matriculaData.matricula);
             } catch (error) {
                 console.error('Error fetching data:', error);
             } finally {
