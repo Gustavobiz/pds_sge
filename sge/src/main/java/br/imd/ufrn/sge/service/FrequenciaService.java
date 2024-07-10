@@ -22,8 +22,14 @@ public class FrequenciaService {
         return frequenciaRepository.findById(id);
     }
 
-    public List<Frequencia> salvar(List<Frequencia> frequencias) {
-        return frequenciaRepository.saveAll(frequencias);
+    public Frequencia salvar(Frequencia frequencia) {
+        List<Frequencia> existingFrequencias = frequenciaRepository.findByDiscenteMateriaAndData(frequencia.getDiscenteMateria(), frequencia.getData());
+        for (Frequencia existingFrequencia : existingFrequencias) {
+            if (existingFrequencia.equals(frequencia)) {
+                return existingFrequencia; // Return the existing one if it's a duplicate
+            }
+        }
+        return frequenciaRepository.save(frequencia); // Save if unique
     }
 
     public void deletar(Long id) {

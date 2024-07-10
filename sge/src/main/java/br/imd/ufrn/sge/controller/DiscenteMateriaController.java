@@ -92,24 +92,32 @@ public class DiscenteMateriaController {
         }
     }
 
-    @PutMapping("/frequencia/{id}")
-    public ResponseEntity<DiscenteMateria> atualizarFrequencia(@PathVariable Long id, @RequestBody List<Frequencia> frequencias) {
-        Optional<DiscenteMateria> disMatExistente = disMatService.encontrarPorId(id);
-        if (disMatExistente.isPresent()) {
-            DiscenteMateria discenteMateria = disMatExistente.get();
+    @PutMapping("/frequencia/edit/{id}")
+    public ResponseEntity<?> atualizarFrequencia(@PathVariable Long id, @RequestBody Frequencia frequencia) {
+        Optional<DiscenteMateria> disMatExistenteOpt = disMatService.encontrarPorId(id);
+        if (disMatExistenteOpt.isPresent()) {
+            DiscenteMateria discenteMateria = disMatExistenteOpt.get();
+            frequencia.setDiscenteMateria(discenteMateria);
 
-            // Save the new Frequencia records
-            List<Frequencia> savedFrequencias = frequenciaService.salvar(frequencias);
-
-            // Add the new Frequencias to the DiscenteMateria
-            for (Frequencia frequencia : savedFrequencias) {
-                discenteMateria.addFrequencia(frequencia);
+            Frequencia savedFrequencia = frequenciaService.salvar(frequencia);
+            if (savedFrequencia != null) {
+                return ResponseEntity.ok().body(discenteMateria.getFrequencias());
+            } else {
+                return ResponseEntity.status(HttpStatus.CONFLICT).body("Frequencia already exists.");
             }
-
-            DiscenteMateria disMatAtualizada = disMatService.salvar(discenteMateria);
-            return ResponseEntity.ok().body(disMatAtualizada);
         } else {
             return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/frequencia/{discenteMateriaId}")
+    public ResponseEntity<?> obterFrequenciasPorDiscenteMateriaId(@PathVariable Long discenteMateriaId) {
+        Optional<DiscenteMateria> discenteMateriaOpt = disMatService.encontrarPorId(discenteMateriaId);
+        if (discenteMateriaOpt.isPresent()) {
+            List<Frequencia> frequencias = discenteMateriaOpt.get().getFrequencias();
+            return ResponseEntity.ok().body(frequencias);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("DiscenteMateria with ID " + discenteMateriaId + " not found");
         }
     }
 

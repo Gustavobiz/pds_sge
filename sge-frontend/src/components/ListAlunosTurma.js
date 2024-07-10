@@ -27,6 +27,25 @@ const ListAlunosTurma = () => {
 
     useEffect(() => {
 
+        const fetchPresencas = async (alunoId) => {
+            try {
+                const response = await fetch(`${domain}:${port}/api/discente-materia/frequencia/${alunoId}`);
+                if (!response.ok) {
+                    throw new Error('Failed to fetch presenca data');
+                }
+                const presencas = await response.json();
+                console.log(presencas);
+                const totalPresencas = presencas.length;
+                const presencasTrue = presencas.filter(presenca => presenca.presenca === true).length;
+                const presencaPercentage = (presencasTrue / totalPresencas) * 100;
+                return presencaPercentage;
+            } catch (error) {
+                console.error("Error fetching presenca data:", error);
+                showToast('error', 'Error', `Não foi possível obter a presença para o aluno com ID ${alunoId}.`);
+                return 'N/A';
+            }
+        };
+
         const fetchMedia = async (id) => {
             try {
                 const response = await fetch(`${domain}:${port}/api/discente-materia/calcular-nota/${id}/normal`);
@@ -34,7 +53,6 @@ const ListAlunosTurma = () => {
                     throw new Error('Failed to fetch grade');
                 }
                 const data = await response.json();
-                console.log(data);
                 return data;
             } catch (error) {
                 console.error("Error fetching grade:", error);
@@ -66,13 +84,13 @@ const ListAlunosTurma = () => {
                 const alunosWithMatricula = await Promise.all(data.map(async (aluno) => {
                     const matriculaResponse = await fetch(`${domain}:${port}/api/matricula/discente/${aluno.matricula_discente.matricula}`);
                     const dadosAluno = await fetchDiscenteByMatricula(aluno.matricula_discente.matricula);
-                    console.log(dadosAluno);
                     if (!matriculaResponse.ok) {
                         throw new Error('Failed to fetch matricula data');
                     }
+                    const presencaPercentage = await fetchPresencas(aluno.id);
                     const matriculaData = await matriculaResponse.json();
                     const mediaData = await fetchMedia(aluno.id);
-                    return { ...aluno, matricula: matriculaData.matricula , nome: dadosAluno.dadosPessoais.nome, media: mediaData.toFixed(2)};
+                    return { ...aluno, matricula: matriculaData.matricula , presenca: presencaPercentage, nome: dadosAluno.dadosPessoais.nome, media: mediaData.toFixed(2)};
                 }));
 
                 setAlunos(alunosWithMatricula);
@@ -128,23 +146,31 @@ const ListAlunosTurma = () => {
         );
     };
 
-    const incrementPresenca = async (rowData) => {
-        const updatedPresenca = rowData.presenca + 1;
+    const incrementPresenca = async (rowData,val) => {
+        const currentTimestamp = new Date().toISOString();
+        const newPresenca = currentTimestamp;
+        console.log(newPresenca);
         try {
-            const response = await fetch(`${domain}:${port}/api/discente-materia/frequencia/${rowData.id}`, {
+            const response = await fetch(`${domain}:${port}/api/discente-materia/frequencia/edit/${rowData.id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    presenca: updatedPresenca,
+                    data: newPresenca,
+                    presenca: val
                 }),
             });
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
+            const updatedPresencas = await response.json();
+            const totalPresencas = updatedPresencas.length;
+            const presencasTrue = updatedPresencas.filter(presenca => presenca.presenca === true).length;
+            const presencaPercentage = (presencasTrue / totalPresencas) * 100;
+
             const updatedAlunos = alunos.map(aluno =>
-                aluno.id === rowData.id ? { ...aluno, presenca: updatedPresenca } : aluno
+                aluno.id === rowData.id ? { ...aluno, presenca: presencaPercentage } : aluno
             );
             setAlunos(updatedAlunos);
             showToast('success', 'Success', 'Presença updated successfully.');
@@ -154,10 +180,12 @@ const ListAlunosTurma = () => {
     };
 
     const presencaTemplate = (rowData) => {
+        const presencaValue = rowData?.presenca ? `${rowData.presenca.toFixed(2)}%` : 'N/A';
         return (
             <div>
-                {`${(rowData.presenca / 50 * 100).toFixed(2)}%`}
-                <Button icon="pi pi-plus" className="p-button-rounded p-button-success p-ml-2" style={{ marginLeft: '10px' }} onClick={() => incrementPresenca(rowData)} />
+                {presencaValue}
+                <Button icon="pi pi-plus" className="p-button-rounded p-button-success p-ml-2" style={{ marginLeft: '10px' }} onClick={() => incrementPresenca(rowData,true)} />
+                <Button icon="pi pi-minus" className="p-button-rounded p-button-success p-ml-2" style={{ marginLeft: '10px' }} onClick={() => incrementPresenca(rowData,false)} />
             </div>
         );
     };

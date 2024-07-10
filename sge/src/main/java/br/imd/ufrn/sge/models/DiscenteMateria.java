@@ -50,6 +50,7 @@ public class DiscenteMateria {
     }
 
     @OneToMany(mappedBy = "discenteMateria", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<Frequencia> frequencias = new ArrayList<>();
 
     public Long getId() {

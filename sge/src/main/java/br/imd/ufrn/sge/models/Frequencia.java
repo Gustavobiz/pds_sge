@@ -1,10 +1,10 @@
 package br.imd.ufrn.sge.models;
-import br.imd.ufrn.sge.models.discente.Discente;
-import br.imd.ufrn.sge.models.discente.MatriculaDiscente;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Objects;
 
-import br.imd.ufrn.sge.models.docente.Docente;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 @Entity
@@ -16,10 +16,12 @@ public class Frequencia {
     private Long id;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    DiscenteMateria discenteMateria;
+    @JoinColumn(name = "id_discente_materia", nullable = false)
+    @JsonBackReference
+    private DiscenteMateria discenteMateria;
 
     @Column(name = "timestamp")
-    private LocalDate data = LocalDate.now();
+    private LocalDateTime data = LocalDateTime.now();
 
     @Column(name = "presenca")
     private boolean presenca;
@@ -33,12 +35,34 @@ public class Frequencia {
         this.presenca = presenca;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public LocalDate getData() {
+    public LocalDateTime getData() {
         return data;
     }
 
+    public void setData(LocalDateTime data) {
+        this.data = data;
+    }
+
+    public DiscenteMateria getDiscenteMateria() {
+        return discenteMateria;
+    }
+
+    public void setDiscenteMateria(DiscenteMateria discenteMateria) {
+        this.discenteMateria = discenteMateria;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Frequencia)) return false;
+        Frequencia that = (Frequencia) o;
+        return presenca == that.presenca &&
+                Objects.equals(data, that.data) &&
+                Objects.equals(discenteMateria, that.discenteMateria);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(data, presenca, discenteMateria);
+    }
 }
