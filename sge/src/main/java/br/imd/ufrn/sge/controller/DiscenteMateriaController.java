@@ -90,13 +90,14 @@ public class DiscenteMateriaController {
         Optional<DiscenteMateria> disMatExistente = disMatService.encontrarPorId(id);
         if (disMatExistente.isPresent()) {
             DiscenteMateria discenteMateria = disMatExistente.get();
-
+            frequencias.forEach(frequencia -> frequencia.setDiscenteMateria(discenteMateria));
             // Save the new Frequencia records
             List<Frequencia> savedFrequencias = frequenciaService.salvar(frequencias);
 
             // Add the new Frequencias to the DiscenteMateria
             for (Frequencia frequencia : savedFrequencias) {
                 discenteMateria.addFrequencia(frequencia);
+
             }
 
             DiscenteMateria disMatAtualizada = disMatService.salvar(discenteMateria);

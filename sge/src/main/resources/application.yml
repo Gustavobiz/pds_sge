@@ -1,3 +1,5 @@
+tipo_aplicacao: "ead"
+
 llm:
   models:
     llama2:

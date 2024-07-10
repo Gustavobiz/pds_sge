@@ -1,10 +1,8 @@
 package br.imd.ufrn.sge.models;
-import br.imd.ufrn.sge.models.discente.Discente;
-import br.imd.ufrn.sge.models.discente.MatriculaDiscente;
 
-import java.time.LocalDate;
+import java.util.Date;
 
-import br.imd.ufrn.sge.models.docente.Docente;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
 @Entity
@@ -16,10 +14,11 @@ public class Frequencia {
     private Long id;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    DiscenteMateria discenteMateria;
+    private DiscenteMateria discenteMateria;
 
     @Column(name = "timestamp")
-    private LocalDate data = LocalDate.now();
+    @JsonProperty("timestamp")
+    private Long timestamp;
 
     @Column(name = "presenca")
     private boolean presenca;
@@ -37,8 +36,11 @@ public class Frequencia {
         return id;
     }
 
-    public LocalDate getData() {
-        return data;
+    public Long getTimeStamp() {
+        return this.timestamp;
     }
 
+    public void setDiscenteMateria(DiscenteMateria discenteMateria) {
+        this.discenteMateria = discenteMateria;
+    }
 }

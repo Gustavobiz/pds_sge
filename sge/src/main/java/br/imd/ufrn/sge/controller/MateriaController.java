@@ -67,6 +67,17 @@ public class MateriaController {
         return ResponseEntity.status(HttpStatus.CREATED).body(novaMateria);
     }
 
+    @PutMapping("/associarDocente/{idDocente}/{idMateria}")
+    public ResponseEntity<?> associarDocenteMateria(@PathVariable Long idDocente, @PathVariable Long idMateria) {
+        try {
+            Materia materia = materiaService.associarDocenteMateria(idDocente, idMateria);
+            return ResponseEntity.ok().body(materia);
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(400).body(e.getMessage());
+        }
+    }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletarMateria(@PathVariable Long id) {

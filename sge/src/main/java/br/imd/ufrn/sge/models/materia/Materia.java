@@ -28,6 +28,10 @@ public class Materia {
     private String descricao;
 
 
+    @Column
+    private String linkVideoAula;
+
+
     @ManyToMany(mappedBy = "materias", cascade = CascadeType.ALL)
     private Set<Turma> turmas;
 

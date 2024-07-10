@@ -65,7 +65,7 @@ const ListTurmas = () => {
     return (
         <div className="list-turma-container">
             <Toast ref={toast}/>
-            <h1>Lista de Turmas</h1>
+            <h1>Lista de Cursos</h1>
             <DataTable value={turmaData}>
                 <Column
                     body={(rowData) => (
