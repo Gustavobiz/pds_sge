@@ -48,7 +48,7 @@ const ListAlunosTurma = () => {
 
         const fetchMedia = async (id) => {
             try {
-                const response = await fetch(`${domain}:${port}/api/discente-materia/calcular-nota/${id}/normal`);
+                const response = await fetch(`${domain}:${port}/api/discente-materia/calcular-nota/${id}`);
                 if (!response.ok) {
                     throw new Error('Failed to fetch grade');
                 }
