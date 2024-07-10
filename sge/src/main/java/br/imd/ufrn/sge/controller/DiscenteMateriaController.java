@@ -1,5 +1,7 @@
 package br.imd.ufrn.sge.controller;
 
+import br.imd.ufrn.sge.config.GlobalStrategy;
+import br.imd.ufrn.sge.framework.notas.INotaStrategy;
 import br.imd.ufrn.sge.models.DiscenteMateria;
 import br.imd.ufrn.sge.models.Frequencia;
 import br.imd.ufrn.sge.framework.aprovacao_materia.*;
@@ -11,11 +13,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
 @RequestMapping(path="/api/discente-materia", produces="application/json")
 public class DiscenteMateriaController {
+
+    @Autowired
+    private GlobalStrategy globalStrategy;
 
         @Autowired
         private DiscenteMateriaService disMatService;
@@ -65,6 +71,11 @@ public class DiscenteMateriaController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Matéria com o ID " + id + " não encontrada");
         }
     }
+        private final Map<String, AprovacaoTemplate> mapStatusTemplate = Map.of(
+            "1", new AprovacaoSimples(),
+            "2", new AprovacaoSubstituicao(),
+            "3", new AprovacaoUFRN()
+    );
 
     @PutMapping(value="/notas/{id}")
     public ResponseEntity<DiscenteMateria> atualizarNotas(
@@ -83,7 +94,8 @@ public class DiscenteMateriaController {
             if(disMat.getProvaFinal() != null) {
                 discenteMateria.setProvaFinal(disMat.getProvaFinal());
                 // Subtituir AProvaçãoSimples por estratégia de aprovação de sua escolha
-                aprovacaoSimples.aprovaAluno(discenteMateria, discenteMateria.getFrequencias());
+                AprovacaoTemplate template = mapStatusTemplate.get(globalStrategy.getEscolhaStrategy().toLowerCase());
+                template.aprovaAluno(discenteMateria, discenteMateria.getFrequencias());
             }
             DiscenteMateria notaAtualizada = disMatService.salvar(discenteMateria);
             return ResponseEntity.ok().body(notaAtualizada);
