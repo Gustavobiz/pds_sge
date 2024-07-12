@@ -8,10 +8,10 @@ import java.util.List;
 @Service("ProgressaoCursos")
 public class ProgressaoCursos implements IProgressaoStrategy {
     @Override
-    public void aprovaAno(MatriculaDiscente matriculaDiscente, List<Boolean> materiasStatus) {
+    public void aprovaAno(MatriculaDiscente matriculaDiscente, List<MatriculaDiscente.Status> materiasStatus) {
         boolean statusFinal = false;
-        for (Boolean status : materiasStatus) {
-            if (status)
+        for (MatriculaDiscente.Status status : materiasStatus) {
+            if (status == MatriculaDiscente.Status.APROVADO)
                 statusFinal = true;
         }
         matriculaDiscente.setStatus(statusFinal ? MatriculaDiscente.Status.APROVADO : MatriculaDiscente.Status.REPROVADO);

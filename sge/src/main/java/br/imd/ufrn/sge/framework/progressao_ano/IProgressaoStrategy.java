@@ -5,5 +5,5 @@ import br.imd.ufrn.sge.models.discente.MatriculaDiscente;
 import java.util.List;
 
 public interface IProgressaoStrategy {
-    void aprovaAno(MatriculaDiscente matriculaDiscente, List<Boolean> materiasStatus);
+    void aprovaAno(MatriculaDiscente matriculaDiscente, List<MatriculaDiscente.Status> materiasStatus);
 }

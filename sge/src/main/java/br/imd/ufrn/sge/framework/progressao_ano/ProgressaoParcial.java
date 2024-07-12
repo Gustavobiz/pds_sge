@@ -7,10 +7,10 @@ import java.util.List;
 @Service("ProgressaoParcial")
 public class ProgressaoParcial implements IProgressaoStrategy {
     @Override
-    public void aprovaAno(MatriculaDiscente matriculaDiscente, List<Boolean> materiasStatus) {
+    public void aprovaAno(MatriculaDiscente matriculaDiscente, List<MatriculaDiscente.Status> materiasStatus) {
         int reprovadas = 0;
-        for (Boolean status : materiasStatus) {
-            if (!status)
+        for (MatriculaDiscente.Status status : materiasStatus) {
+            if (status == MatriculaDiscente.Status.REPROVADO)
                 reprovadas++;
         }
         if (reprovadas > materiasStatus.size() / 2)
