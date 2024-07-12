@@ -15,6 +15,7 @@ public class AprovacaoSimples extends AprovacaoTemplate {
     @Autowired
     private DiscenteMateriaService discenteMateriaService;
 
+
     @Override
     public void aprovaAluno(DiscenteMateria discenteMateria, List<Frequencia> frequencias) {
         float u1 = discenteMateria.getUnidade1();
@@ -25,11 +26,11 @@ public class AprovacaoSimples extends AprovacaoTemplate {
 
         float frequencia = calculaFrequencia(frequencias);
 
-        if(media < 60) {
+        if(media < 6) {
             media = (media + pf) / 2;
         }
 
-        if(media >= 60 && frequencia >= 75) {
+        if(media >= 6 && frequencia >= 75) {
             discenteMateria.setStatus(MatriculaDiscente.Status.APROVADO);
         } else {
             discenteMateria.setStatus(MatriculaDiscente.Status.REPROVADO);

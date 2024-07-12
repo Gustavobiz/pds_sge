@@ -1,12 +1,17 @@
 package br.imd.ufrn.sge.service;
 
 import br.imd.ufrn.sge.config.GlobalStrategy;
+import br.imd.ufrn.sge.framework.aprovacao_materia.AprovacaoSimples;
+import br.imd.ufrn.sge.framework.aprovacao_materia.AprovacaoSubstituicao;
+import br.imd.ufrn.sge.framework.aprovacao_materia.AprovacaoTemplate;
+import br.imd.ufrn.sge.framework.aprovacao_materia.AprovacaoUFRN;
 import br.imd.ufrn.sge.framework.notas.INotaStrategy;
 import br.imd.ufrn.sge.framework.notas.NotaAmericanaStrategy;
 import br.imd.ufrn.sge.framework.notas.NotaNormalStrategy;
 import br.imd.ufrn.sge.framework.notas.NotaPonderadaStrategy;
 import br.imd.ufrn.sge.models.DiscenteMateria;
 import br.imd.ufrn.sge.relatorio.repository.DiscenteMateriaRepository;
+import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,17 +28,33 @@ public class DiscenteMateriaService {
     @Autowired
     private DiscenteMateriaRepository discenteMateriaRepository;
 
+    // Autowired instances of AprovacaoTemplate implementations
+    @Autowired
+    private AprovacaoSimples aprovacaoSimples;
+    @Autowired
+    private AprovacaoSubstituicao aprovacaoSubstituicao;
+    @Autowired
+    private AprovacaoUFRN aprovacaoUFRN;
+
+    // Map for AprovacaoTemplate
+    private Map<String, AprovacaoTemplate> mapAprovacaoTemplate;
+
+    @PostConstruct
+    public void init() {
+        mapAprovacaoTemplate = Map.of(
+                "1", aprovacaoSimples,
+                "2", aprovacaoSubstituicao,
+                "3", aprovacaoUFRN
+        );
+    }
+
     private final Map<String, INotaStrategy> mapStrategy = Map.of(
             "1", new NotaNormalStrategy(),
             "2", new NotaAmericanaStrategy(),
             "3", new NotaPonderadaStrategy()
     );
 
-//    private final Map<String, AprovacaoTemplate> mapStatusTemplate = Map.of(
-//            "normal", new AprovacaoSimples(),
-//            "americana", new AprovacaoSubstituicao(),
-//            "ead", new AprovacaoUFRN()
-//    );
+
     public List<DiscenteMateria> listarTodos() {
         return discenteMateriaRepository.findAll();
     }
@@ -42,7 +63,7 @@ public class DiscenteMateriaService {
         return discenteMateriaRepository.findById(id);
     }
 
-    public List<DiscenteMateria> encontrarPorMatriculaDiscente(Long matricula_discente) {
+    public List<DiscenteMateria> encontrarPorMatriculaDiscente(String matricula_discente) {
         return discenteMateriaRepository.findByDiscenteMatricula(matricula_discente);
     }
 
@@ -55,7 +76,19 @@ public class DiscenteMateriaService {
     }
 
     @Transactional
-    public DiscenteMateria salvar(DiscenteMateria nota) {
+    public DiscenteMateria salvar(DiscenteMateria nota, DiscenteMateria nota_nova) {
+        if(nota_nova.getUnidade1() != null)
+            nota.setUnidade1(nota_nova.getUnidade1());
+        if(nota_nova.getUnidade2() != null)
+            nota.setUnidade2(nota_nova.getUnidade2());
+        if(nota_nova.getUnidade3() != null)
+            nota.setUnidade3(nota_nova.getUnidade3());
+        if(nota_nova.getProvaFinal() != null) {
+            nota.setProvaFinal(nota_nova.getProvaFinal());
+            String strategyChoice = globalStrategy.getEscolhaStrategy().toLowerCase();
+            AprovacaoTemplate template = mapAprovacaoTemplate.get(strategyChoice);
+            template.aprovaAluno(nota, nota.getFrequencias());
+        }
         return discenteMateriaRepository.save(nota);
     }
 

@@ -4,8 +4,11 @@ import br.imd.ufrn.sge.models.DiscenteMateria;
 import br.imd.ufrn.sge.models.Frequencia;
 import br.imd.ufrn.sge.models.discente.MatriculaDiscente;
 import br.imd.ufrn.sge.service.DiscenteMateriaService;
+import org.springframework.stereotype.Service;
+
 import java.util.List;
 
+@Service
 
 public class AprovacaoSubstituicao extends AprovacaoTemplate{
 
@@ -21,7 +24,7 @@ public class AprovacaoSubstituicao extends AprovacaoTemplate{
 
         float frequencia = calculaFrequencia(frequencias);
 
-        if(media < 60 && pf > menorNota) {
+        if(media < 6 && pf > menorNota) {
             if(menorNota == u1) {
                 u1 = pf;
             } else if(menorNota == u2) {
@@ -32,7 +35,7 @@ public class AprovacaoSubstituicao extends AprovacaoTemplate{
             media = discenteMateriaService.calcularNota(u1, u2, u3 );
         }
 
-        if(media >= 60 && frequencia >= 75) {
+        if(media >= 6 && frequencia >= 75) {
             discenteMateria.setStatus(MatriculaDiscente.Status.APROVADO);
         } else {
             discenteMateria.setStatus(MatriculaDiscente.Status.REPROVADO);

@@ -23,16 +23,11 @@ public class DiscenteMateriaController {
     @Autowired
     private GlobalStrategy globalStrategy;
 
-        @Autowired
-        private DiscenteMateriaService disMatService;
+    @Autowired
+    private DiscenteMateriaService disMatService;
 
-        @Autowired
-        private FrequenciaService frequenciaService;
-
-        @Autowired
-        private AprovacaoSimples aprovacaoSimples;
-
-
+    @Autowired
+    private FrequenciaService frequenciaService;
 
     @GetMapping("/")
         public List<DiscenteMateria> listarNotas() {
@@ -51,7 +46,7 @@ public class DiscenteMateriaController {
         }
     }
     @GetMapping("/discente/{matricula_discente}")
-    public ResponseEntity<?> obterMateriaPorMatriculaDiscente(@PathVariable Long matricula_discente) {
+    public ResponseEntity<?> obterMateriaPorMatriculaDiscente(@PathVariable String matricula_discente) {
         List<DiscenteMateria> notasEncontradas = disMatService.encontrarPorMatriculaDiscente(matricula_discente);
 
         if (!notasEncontradas.isEmpty()) {
@@ -71,11 +66,6 @@ public class DiscenteMateriaController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Matéria com o ID " + id + " não encontrada");
         }
     }
-        private final Map<String, AprovacaoTemplate> mapStatusTemplate = Map.of(
-            "1", new AprovacaoSimples(),
-            "2", new AprovacaoSubstituicao(),
-            "3", new AprovacaoUFRN()
-    );
 
     @PutMapping(value="/notas/{id}")
     public ResponseEntity<DiscenteMateria> atualizarNotas(
@@ -85,19 +75,7 @@ public class DiscenteMateriaController {
             Optional<DiscenteMateria> disMatExistente = disMatService.encontrarPorId(id);
         if (disMatExistente.isPresent()) {
             DiscenteMateria discenteMateria = disMatExistente.get();
-            if(disMat.getUnidade1() != null)
-                discenteMateria.setUnidade1(disMat.getUnidade1());
-            if(disMat.getUnidade2() != null)
-                discenteMateria.setUnidade2(disMat.getUnidade2());
-            if(disMat.getUnidade3() != null)
-                discenteMateria.setUnidade3(disMat.getUnidade3());
-            if(disMat.getProvaFinal() != null) {
-                discenteMateria.setProvaFinal(disMat.getProvaFinal());
-                // Subtituir AProvaçãoSimples por estratégia de aprovação de sua escolha
-                AprovacaoTemplate template = mapStatusTemplate.get(globalStrategy.getEscolhaStrategy().toLowerCase());
-                template.aprovaAluno(discenteMateria, discenteMateria.getFrequencias());
-            }
-            DiscenteMateria notaAtualizada = disMatService.salvar(discenteMateria);
+            DiscenteMateria notaAtualizada = disMatService.salvar(discenteMateria,disMat);
             return ResponseEntity.ok().body(notaAtualizada);
         } else {
             return ResponseEntity.notFound().build();

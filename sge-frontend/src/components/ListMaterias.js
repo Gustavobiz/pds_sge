@@ -51,7 +51,7 @@ const ListMaterias = () => {
             const totalPresencas = presencas.length;
             const presencasTrue = presencas.filter(presenca => presenca.presenca === true).length;
             const presencaPercentage = (presencasTrue / totalPresencas) * 100;
-            return presencaPercentage;
+            return presencaPercentage + '%';
         } catch (error) {
             console.error("Error fetching presenca data:", error);
             showToast('error', 'Error', `Não foi possível obter a presença para o aluno com ID ${alunoId}.`);
@@ -65,16 +65,17 @@ const ListMaterias = () => {
             try {
                 console.log(matricula)
                 const response = await fetch(`${domain}:${port}/api/discente-materia/discente/${matricula}`);
-                console.lo("oKAY")
+                console.log(response)
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
                 const data = await response.json();
+                console.log(data)
                 const materiasPresenca = await Promise.all(data.map(async (materia) => {
                     const presencaPercentage = await fetchPresencas(materia.id);
                     return { ...materia, presenca: presencaPercentage };
                 }));
-                console.lo("oKAY2")
+                console.log("oKAY2")
                 setMaterias(materiasPresenca);
             } catch (error) {
                 showToast('error', 'Error', 'Não foi possível listar as matérias.');

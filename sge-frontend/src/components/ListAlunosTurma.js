@@ -192,7 +192,7 @@ const ListAlunosTurma = () => {
 
     const relatorioTemplate = (rowData) => {
         return (
-            <Button label="Relatório" icon="pi pi-file" className="p-button-rounded p-button-info" onClick={() => window.location.href = `${domain}:${port_react}/relatorio/${rowData.matricula}`} />
+            <Button label="Relatório" icon="pi pi-file" className="p-button-rounded p-button-info" onClick={() => window.location.href = `${domain}:${port_react}/relatorio/${rowData.matricula_discente.id}`} />
         );
     };
 

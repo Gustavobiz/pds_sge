@@ -19,7 +19,7 @@ const Relatorio = () => {
 
     const handleChange = (event) => {
         setRelatorio(event.target.value);
-    };
+    };  
 
     const handleSubmit = () => {
         setLoading(true);

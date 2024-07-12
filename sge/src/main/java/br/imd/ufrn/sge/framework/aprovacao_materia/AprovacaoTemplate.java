@@ -2,9 +2,11 @@ package br.imd.ufrn.sge.framework.aprovacao_materia;
 
 import br.imd.ufrn.sge.models.DiscenteMateria;
 import br.imd.ufrn.sge.models.Frequencia;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public abstract class AprovacaoTemplate {
 
     public void aprovacaoMethod(DiscenteMateria discenteMateria, List<Frequencia> frequencias) {
