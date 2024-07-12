@@ -201,10 +201,27 @@ const ListAlunosTurma = () => {
             <Button label="Observações" icon="pi pi-eye" className="p-button-rounded p-button-info" onClick={() => navigate(`/observacoes/${id}/${rowData.matricula}`)} />
         );
     };
+    const handleConcluirSemestre = async () => {
+        try {
+            await Promise.all(alunos.map(aluno =>
+                fetch(`${domain}:${port}/api/matricula/discente/aprovacao/${aluno.matricula_discente.matricula}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                })
+            ));
+            showToast('success', 'Sucesso', 'Semestre concluído para todos os discentes.');
+        } catch (error) {
+            console.error("Error concluding semester for discentes:", error);
+            showToast('error', 'Erro', 'Não foi possível concluir o semestre para todos os discentes.');
+        }
+    };
 
     return (
         <div className="list-alunos-container">
             <Toast ref={toast} />
+            <Button label="Concluir Semestre" className="p-button-rounded p-button-success" onClick={handleConcluirSemestre} />
             <h1>Lista de Alunos</h1>
             <DataTable value={alunos} responsiveLayout="scroll" editMode="row" dataKey="id"
                        editingRows={editingRows} onRowEditChange={onRowEditChange} onRowEditComplete={onRowEditComplete}>

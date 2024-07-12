@@ -46,7 +46,7 @@ public class MatriculaDiscenteController {
     @PutMapping("/discente/aprovacao/{matricula_discente}")
     public ResponseEntity<?> atualizarAprovacaoAnual(@PathVariable String matricula_discente) {
         Optional<MatriculaDiscente> matriculaDiscente = matriculaDiscenteService.encontrarMatriculaDiscentePorNumeroMatricula(matricula_discente);
-        if (!matriculaDiscente.isPresent()) {
+        if (matriculaDiscente.isPresent()) {
             List<DiscenteMateria> discenteMaterias = discenteMateriaService.encontrarPorMatriculaDiscente(matricula_discente);
 
             List<MatriculaDiscente.Status> materiaStatus = discenteMaterias.stream()

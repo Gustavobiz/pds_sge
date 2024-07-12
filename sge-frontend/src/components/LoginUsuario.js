@@ -67,10 +67,10 @@ const LoginUsuario = () => {
                 // Check user role and fetch respective ID
                 if (userData.role === "DOCENTE") {
                     const docenteId = await fetchDocenteByIdPessoa(userData.idDadosPessoais);
-                    navigate(`/home-docente/${docenteId}`); // Navigate using docenteId
+                    navigate(`/home-docente/${userData.idDadosPessoais}/${docenteId}`); // Navigate using docenteId
                 } else if (userData.role === "DISCENTE") {
                     const discenteId = await fetchDiscenteByIdPessoa(userData.idDadosPessoais);
-                    navigate(`/home-discente/${discenteId}`); // Navigate using discenteId
+                    navigate(`/home-discente/${userData.idDadosPessoais}/${discenteId}`); // Navigate using discenteId
                 }
 
             } else {

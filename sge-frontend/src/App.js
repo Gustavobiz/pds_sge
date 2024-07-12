@@ -22,9 +22,9 @@ function App() {
                 <Route path="/lista-alunos-turma/:id" element={<ListAlunosTurma />} />
                 <Route path="/lista-materias/:matricula" element={<ListMaterias/>} />
                 <Route path="/lista-turmas/:id" element={<ListTurmas />} />
-                <Route path="/home-docente/:id" element={<HomeDocente />} />
-                <Route path="/home-discente/:id" element={<HomeDiscente />} />
-                <Route path="/perfil/:id" element={<Perfil />} />
+                <Route path="/home-docente/:userId/:id" element={<HomeDocente />} />
+                <Route path="/home-discente/:userId/:id" element={<HomeDiscente />} />
+                <Route path="/perfil/:userId/:id" element={<Perfil />} />
                 <Route path="/relatorio/:id" element={<Relatorio />} />
                 <Route path="/observacoes/:id/:matricula_discente" element={<ObservacoesHandler />} />
             </Routes>
