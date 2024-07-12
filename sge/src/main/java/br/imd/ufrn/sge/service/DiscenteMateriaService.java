@@ -87,7 +87,7 @@ public class DiscenteMateriaService {
             nota.setProvaFinal(nota_nova.getProvaFinal());
             String strategyChoice = globalStrategy.getEscolhaStrategy().toLowerCase();
             AprovacaoTemplate template = mapAprovacaoTemplate.get(strategyChoice);
-            template.aprovaAluno(nota, nota.getFrequencias());
+            template.aprovacaoMethod(nota, nota.getFrequencias());
         }
         return discenteMateriaRepository.save(nota);
     }

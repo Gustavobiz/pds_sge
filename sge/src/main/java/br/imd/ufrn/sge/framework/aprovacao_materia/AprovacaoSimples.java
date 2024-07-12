@@ -17,14 +17,12 @@ public class AprovacaoSimples extends AprovacaoTemplate {
 
 
     @Override
-    public void aprovaAluno(DiscenteMateria discenteMateria, List<Frequencia> frequencias) {
+    public void aprovaAluno(DiscenteMateria discenteMateria, float frequencia) {
         float u1 = discenteMateria.getUnidade1();
         float u2 = discenteMateria.getUnidade2();
         float u3 = discenteMateria.getUnidade3();
         float pf = discenteMateria.getProvaFinal();
         float media = discenteMateriaService.calcularNota(u1,u2,u3);
-
-        float frequencia = calculaFrequencia(frequencias);
 
         if(media < 6) {
             media = (media + pf) / 2;

@@ -10,8 +10,8 @@ import java.util.List;
 public abstract class AprovacaoTemplate {
 
     public void aprovacaoMethod(DiscenteMateria discenteMateria, List<Frequencia> frequencias) {
-        calculaFrequencia(frequencias);
-        aprovaAluno(discenteMateria, frequencias);
+        float frequenciaPerc = calculaFrequencia(frequencias);
+        aprovaAluno(discenteMateria, frequenciaPerc);
     }
 
     public float calculaFrequencia(List<Frequencia> frequencias) {
@@ -28,5 +28,5 @@ public abstract class AprovacaoTemplate {
         return (totalPresencas * 100) / totalAulas;
     }
 
-    public abstract void aprovaAluno(DiscenteMateria discenteMateria, List<Frequencia> frequencias);
+    public abstract void aprovaAluno(DiscenteMateria discenteMateria, float frequencia );
 }
